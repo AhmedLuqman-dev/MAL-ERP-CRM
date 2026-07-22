@@ -263,9 +263,8 @@ In addition to the core requirements, this project implements several bonus feat
 
 ## Project Links
 
-- **GitHub Repository:** [https://github.com/AhmedLuqman-dev/MAL-ERP-CRM](https://github.com/AhmedLuqman-dev/MAL-ERP-CRM)
 - **Live Frontend URL:** [https://mal-erp-crm.vercel.app/](https://mal-erp-crm.vercel.app/)
-- **Live Backend API URL:** [https://api.malerp.me/](https:///)
+- **Live Backend API URL:** [https://https://mal-erp-crm.onrender.com/](https://https://mal-erp-crm.onrender.com/)
 - **Supabase Project:** [https://supabase.com/](https://supabase.com/)
 
 ## License

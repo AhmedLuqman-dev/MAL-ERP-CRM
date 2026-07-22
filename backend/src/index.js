@@ -11,7 +11,7 @@ import challanRoutes from './routes/challanRoutes.js';
 const app = express();
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: config.clientUrl,
     credentials: true,
   })
 );
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (_req, res) => {
-  res.json({ success: true, message: 'Enterprise ERP API is running' });
+  res.json({ success: true, message: 'mal ERP API is running' });
 });
 
 app.use('/api/auth', authRoutes);
