@@ -13,7 +13,7 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React, Vite, Tailwind CSS, React Router, Axios, React Hook Form |
+| Frontend | React, Vite, Tailwind CSS |
 | Backend | Node.js, Express.js, JavaScript |
 | Database | Supabase PostgreSQL |
 | Auth | JWT (bcrypt password hashing) |
@@ -22,14 +22,14 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 
 ```
 .
-├── client/ (src/)          # Frontend React application
+├── frontend/ (src/)          # Frontend React application
 │   ├── components/          # Reusable UI components
 │   ├── constants/           # App constants and config
 │   ├── hooks/               # Custom React hooks
 │   ├── pages/               # Route pages
 │   ├── services/            # API service layer (Axios)
 │   └── utils/               # Utility functions
-├── server/                  # Backend Express application
+├── backend/                  # Backend Express application
 │   └── src/
 │       ├── config/          # App config, Supabase client, constants
 │       ├── controllers/     # Route controllers
@@ -39,14 +39,15 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 │       ├── utils/            # Error classes, helpers
 │       └── validators/       # Express-validator schemas
 ├── postman/                 # Postman collection
+├── supabase/                # Supabase integration schema 
 └── README.md
 ```
 
 ## Prerequisites
 
 - Node.js 18+
-- npm or yarn
-- A Supabase project (or use the pre-configured one)
+- npm 
+- A Supabase project 
 
 ## Installation
 
@@ -54,29 +55,29 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 
 ```bash
 # Install frontend dependencies
+cd frontend
 npm install
 
 # Install backend dependencies
-cd server
+cd backend
 npm install
-cd ..
 ```
 
 ### 2. Environment Variables
 
-#### Frontend (`.env` in project root)
+#### Frontend (`frontend/.env`)
 
 ```env
-VITE_API_URL=http://localhost:5000/api
+VITE_API_URL=http://localhost:5000/api || BACKEND_URL
 ```
 
-#### Backend (`server/.env`)
+#### Backend (`backend/.env`)
 
 ```env
 PORT=5000
-JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_SECRET=your-super-secret-jwt-key
 JWT_EXPIRES_IN=24h
-CLIENT_URL=http://localhost:5173
+CLIENT_URL=http://localhost:5173 || FRONTEND_URL
 SUPABASE_URL=your-supabase-project-url
 SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 ```
@@ -108,23 +109,14 @@ Seed users are automatically inserted:
 
 ```bash
 # Terminal 1: Start the backend
-cd server
+cd backend
 npm run dev
 
 # Terminal 2: Start the frontend
+cd frontend
 npm run dev
 ```
 
-JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=24h
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-```
-
-5. Start the backend development server:
-```bash
-npm run dev
-```
 
 ### 3. Frontend Setup
 
@@ -193,13 +185,13 @@ npm run dev
 
 ### Backend (Render / Railway / Fly.io)
 
-1. Set all environment variables from `server/.env.example`
+1. Set all environment variables in `backend/.env`
 2. Start command: `npm start`
 3. Health check: `/api/health`
 
 ### Database (Supabase)
 
-The Supabase project is pre-provisioned. The schema and seed data are applied via migrations.
+Supabase: [link](https://supabase.com/)
 
 ## Postman Collection
 
