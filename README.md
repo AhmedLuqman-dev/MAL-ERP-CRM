@@ -15,7 +15,6 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 - [Postman Collection](#postman-collection)
 - [Deployment](#deployment)
 - [Environment Variable Management](#environment-variable-management)
-- [Server Setup](#server-setup)
 - [Assumptions](#assumptions)
 - [Bonus Features](#bonus-features)
 - [Project Links](#project-links)
@@ -220,13 +219,13 @@ Import the collection from `postman/Enterprise ERP.postman_collection.json` to t
 
 ## Deployment
 
-### Frontend (Vercel / Netlify)
+### Frontend (Vercel)
 
 1. Set `VITE_API_URL` to your backend URL
 2. Build command: `npm run build`
 3. Output directory: `dist`
 
-### Backend (Render / Railway / Fly.io)
+### Backend (Render)
 
 1. Set all environment variables in `backend/.env`
 2. Start command: `npm start`
@@ -240,15 +239,6 @@ Supabase: [link](https://supabase.com/)
 
 The application uses `.env` files to manage configuration and secrets across environments. These files configure both frontend API connections and backend settings. They are explicitly excluded from version control using `.gitignore` to prevent leaking sensitive information and credentials.
 
-## Server Setup
-
-The backend is built on Express.js and is initialized as follows:
-- **Express Initialization:** Sets up the Express app instance.
-- **Middleware Registration:** Global middlewares like CORS, body-parser (JSON), and logging are registered first.
-- **Supabase Initialization:** The Supabase client is initialized in a dedicated configuration file using the project URL and service role key.
-- **Route Setup:** API routes are modularized by feature (e.g., Auth, Customers, Products, Challans) and mounted onto a base `/api` path.
-- **Authentication:** Protected routes utilize a custom JWT middleware that verifies Bearer tokens and attaches the user context to the request.
-- **Error Handling:** A centralized error-handling middleware catches all unhandled exceptions and formats them into standard JSON error responses.
 
 ## Assumptions
 
@@ -273,10 +263,10 @@ In addition to the core requirements, this project implements several bonus feat
 
 ## Project Links
 
-- **GitHub Repository:** [Insert Link Here]
-- **Live Frontend URL:** [Insert Link Here]
-- **Live Backend API URL:** [Insert Link Here]
-- **Supabase Project:** [Insert Link Here]
+- **GitHub Repository:** [https://github.com/AhmedLuqman-dev/MAL-ERP-CRM](https://github.com/AhmedLuqman-dev/MAL-ERP-CRM)
+- **Live Frontend URL:** [https://mal-erp-crm.vercel.app/](https://mal-erp-crm.vercel.app/)
+- **Live Backend API URL:** [https://api.malerp.me/](https:///)
+- **Supabase Project:** [https://supabase.com/](https://supabase.com/)
 
 ## License
 

@@ -9,11 +9,13 @@ import productRoutes from './routes/productRoutes.js';
 import challanRoutes from './routes/challanRoutes.js';
 
 const app = express();
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
-app.use(cors({
-  origin: config.clientUrl,
-  credentials: true,
-}));
 app.use(express.json());
 app.use(morgan('dev'));
 
