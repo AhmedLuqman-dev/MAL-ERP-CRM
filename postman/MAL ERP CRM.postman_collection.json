@@ -1,0 +1,441 @@
+{
+  "info": {
+    "name": "MAL ERP/CRM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "MAL ERP/CRM API collection - JWT authentication, Customer CRM, Products, Inventory, and Sales Challans"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "Authentication and user profile endpoints.",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@erp.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Login with email and password. Returns JWT token and user info."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "  pm.collectionVariables.set('token', jsonData.data.token);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Retrieves the currently authenticated user's profile information."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customers",
+      "description": "CRM module endpoints for managing customers and their follow-up notes.",
+      "item": [
+        {
+          "name": "List Customers",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers?page=1&pageSize=10&search=&status=&customer_type=",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number (default: 1)" },
+                { "key": "pageSize", "value": "10", "description": "Items per page (default: 10, max: 100)" },
+                { "key": "search", "value": "", "description": "Search by name, email, mobile, or business_name" },
+                { "key": "status", "value": "", "description": "Filter by status: lead, active, inactive" },
+                { "key": "customer_type", "value": "", "description": "Filter by type: retail, wholesale, distributor" }
+              ]
+            },
+            "description": "Retrieve a paginated list of customers with optional search and filters."
+          }
+        },
+        {
+          "name": "Get Customer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", ":id"]
+            },
+            "description": "Retrieve a specific customer's details by their UUID."
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"mobile\": \"+1 234 567 890\",\n  \"email\": \"john@example.com\",\n  \"business_name\": \"Acme Inc\",\n  \"gst_number\": \"22AAAAA0000A1Z5\",\n  \"customer_type\": \"retail\",\n  \"address\": \"123 Main St, City\",\n  \"status\": \"lead\",\n  \"follow_up_date\": \"2026-12-31\",\n  \"notes\": \"Interested in bulk pricing\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers"]
+            },
+            "description": "Create a new customer record. Requires Admin or Sales role."
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe Updated\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", ":id"]
+            },
+            "description": "Update an existing customer's information. Requires Admin or Sales role."
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", ":id"]
+            },
+            "description": "Delete a customer record entirely. Requires Admin role."
+          }
+        },
+        {
+          "name": "Get Follow Up Notes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/customers/:id/follow-up-notes",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", ":id", "follow-up-notes"]
+            },
+            "description": "Retrieve all follow-up notes for a specific customer."
+          }
+        },
+        {
+          "name": "Add Follow Up Note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Called customer, discussed pricing details.\",\n  \"follow_up_date\": \"2026-12-31\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/customers/:id/follow-up-notes",
+              "host": ["{{baseUrl}}"],
+              "path": ["customers", ":id", "follow-up-notes"]
+            },
+            "description": "Add a new follow-up note to a customer. This automatically updates the customer's follow_up_date."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "description": "Endpoints for managing the product catalog and master stock details.",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?page=1&pageSize=10&search=&category=&lowStock=false",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number (default: 1)" },
+                { "key": "pageSize", "value": "10", "description": "Items per page (default: 10, max: 100)" },
+                { "key": "search", "value": "", "description": "Search by product name or SKU" },
+                { "key": "category", "value": "", "description": "Filter by product category" },
+                { "key": "lowStock", "value": "false", "description": "Filter strictly for products where current_stock <= minimum_stock" }
+              ]
+            },
+            "description": "Retrieve a paginated list of products with optional search and filters."
+          }
+        },
+        {
+          "name": "Get Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", ":id"]
+            },
+            "description": "Retrieve a specific product's details by its UUID."
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Widget Pro\",\n  \"sku\": \"WGT-001\",\n  \"category\": \"Electronics\",\n  \"unit_price\": 29.99,\n  \"current_stock\": 100,\n  \"minimum_stock\": 10,\n  \"warehouse_location\": \"A-1-2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Create a new product. Will automatically log an initial stock movement if current_stock > 0."
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Widget Pro V2\",\n  \"unit_price\": 34.99\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", ":id"]
+            },
+            "description": "Update an existing product's master data."
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", ":id"]
+            },
+            "description": "Delete a product entirely. Requires Admin role."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "description": "Endpoints dedicated to managing inventory and tracking stock movements (IN/OUT).",
+      "item": [
+        {
+          "name": "List Stock Movements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/inventory/movements?page=1&pageSize=10&movement_type=&product_id=",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "inventory", "movements"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "pageSize", "value": "10", "description": "Items per page" },
+                { "key": "movement_type", "value": "", "description": "Filter by type: IN or OUT" },
+                { "key": "product_id", "value": "", "description": "Filter movements for a specific product UUID" }
+              ]
+            },
+            "description": "Retrieve a paginated log of all stock movements across the application."
+          }
+        },
+        {
+          "name": "Log Stock Movement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"<product-uuid>\",\n  \"quantity_changed\": 50,\n  \"movement_type\": \"IN\",\n  \"reason\": \"New stock arrival\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/inventory/movements",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "inventory", "movements"]
+            },
+            "description": "Manually log a stock addition or deduction. Automatically adjusts the product's total current_stock."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales Challans",
+      "description": "Endpoints to create and manage delivery/sales challans.",
+      "item": [
+        {
+          "name": "List Challans",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/challans?page=1&pageSize=10&status=",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans"],
+              "query": [
+                { "key": "page", "value": "1", "description": "Page number" },
+                { "key": "pageSize", "value": "10", "description": "Items per page" },
+                { "key": "status", "value": "", "description": "Filter by status: draft, confirmed, cancelled" }
+              ]
+            },
+            "description": "Retrieve a paginated list of all sales challans."
+          }
+        },
+        {
+          "name": "Get Challan",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/challans/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", ":id"]
+            },
+            "description": "Retrieve complete details of a specific challan, including line items and product snapshots."
+          }
+        },
+        {
+          "name": "Create Challan",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": \"<customer-uuid>\",\n  \"items\": [\n    {\n      \"product_id\": \"<product-uuid-1>\",\n      \"quantity\": 5\n    },\n    {\n      \"product_id\": \"<product-uuid-2>\",\n      \"quantity\": 3\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challans",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans"]
+            },
+            "description": "Create a new sales challan. It starts in 'draft' status and assigns a system-generated challan number."
+          }
+        },
+        {
+          "name": "Update Challan Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/challans/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["challans", ":id", "status"]
+            },
+            "description": "Update the status of a challan. When changed to 'confirmed', stock is automatically deducted."
+          }
+        }
+      ]
+    }
+  ]
+}

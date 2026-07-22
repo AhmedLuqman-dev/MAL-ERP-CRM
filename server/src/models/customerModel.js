@@ -1,0 +1,20 @@
+export const CustomerModel = {
+  tableName: 'customers',
+  fields: {
+    id: { type: 'uuid', primaryKey: true, default: 'gen_random_uuid()' },
+    name: { type: 'text', required: true },
+    mobile: { type: 'text', required: true },
+    email: { type: 'text' },
+    business_name: { type: 'text' },
+    gst_number: { type: 'text' },
+    customer_type: { type: 'text', required: true, values: ['retail', 'wholesale', 'distributor'] },
+    address: { type: 'text' },
+    status: { type: 'text', required: true, values: ['lead', 'active', 'inactive'], default: 'lead' },
+    follow_up_date: { type: 'date' },
+    notes: { type: 'text' },
+    created_by: { type: 'uuid', foreignKey: 'users.id' },
+    created_at: { type: 'timestamptz', default: 'now()' },
+    updated_at: { type: 'timestamptz', default: 'now()' },
+  },
+  selectableFields: ['id', 'name', 'mobile', 'email', 'business_name', 'gst_number', 'customer_type', 'address', 'status', 'follow_up_date', 'notes', 'created_by', 'created_at', 'updated_at'],
+};
