@@ -112,7 +112,6 @@ export function ChallanDetailsPage() {
             )}
           </div>
         </div>
-
         <div className="space-y-6">
           <div className="card p-5">
             <h3 className="text-sm font-semibold text-charcoal-800 mb-3">Metadata</h3>

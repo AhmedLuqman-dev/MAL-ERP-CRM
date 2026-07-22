@@ -125,7 +125,6 @@ export function exportChallanPDF(challan) {
     doc.text(`Page ${i} of ${pageCount}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
     doc.text('© 2026 MAL ERP/CRM. All rights reserved.', pageWidth - 14, pageHeight - 10, { align: 'right' });
   }
-
   // --- Save PDF ---
   const fileName = `challan-${challan.challan_number || 'export'}.pdf`;
   doc.save(fileName);

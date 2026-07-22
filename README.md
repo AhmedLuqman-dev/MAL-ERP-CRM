@@ -2,21 +2,49 @@
 
 MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationship Management application built using React, Express.js, Node.js, Tailwind CSS, and Supabase.
 
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Running the Application](#running-the-application)
+- [Architecture](#architecture)
+- [API Documentation](#api-documentation)
+- [Test Credentials](#test-credentials)
+- [Postman Collection](#postman-collection)
+- [Deployment](#deployment)
+- [Environment Variable Management](#environment-variable-management)
+- [Server Setup](#server-setup)
+- [Assumptions](#assumptions)
+- [Bonus Features](#bonus-features)
+- [Project Links](#project-links)
+- [License](#license)
+
 ## Features
 
-- **JWT Authentication** with role-based access control (Admin, Sales, Warehouse, Accounts)
-- **Customer CRM** — manage customers, search, filter, follow-up notes
-- **Product & Inventory** — product catalog, stock movement logs, low-stock alerts
-- **Sales Challans** — create delivery challans with product snapshots, auto-generated challan numbers, stock reduction on confirmation
+-  **JWT Authentication** — Secure user sessions with role-based access control (Admin, Sales, Warehouse, Accounts).
+-  **Role-based Access Control** — Granular permissions for different parts of the system.
+-  **Customer CRM** — Manage customers, search, filter, and track follow-up notes.
+-  **Product & Inventory Management** — Comprehensive product catalog management.
+-  **Stock Movement Tracking** — Detailed stock movement logs with real-time updates.
+-  **Sales Challan Management** — Create and track delivery challans and invoices.
+-  **Automatic Challan Number Generation** — Auto-generated, sequential challan numbering.
+-  **Product Snapshot Storage** — Accurate historical records with product snapshots stored in challans.
+-  **PDF Export** — Export Sales Challan / Invoice as PDF.
+-  **Low Stock Alerts** — Automated warnings when inventory drops below threshold.
+-  **Pagination, Search & Filtering** — Efficient data retrieval and navigation across the application.
+-  **Input Validation** — Robust data validation for all API inputs.
+-  **Centralized Error Handling** — Clean, consistent error responses.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React, Vite, Tailwind CSS |
-| Backend | Node.js, Express.js, JavaScript |
-| Database | Supabase PostgreSQL |
-| Auth | JWT (bcrypt password hashing) |
+| **Frontend** | React, Vite, Tailwind CSS |
+| **Backend** | Node.js, Express.js, JavaScript |
+| **Database** | Supabase PostgreSQL |
+| **Auth** | JWT (bcrypt password hashing) |
 
 ## Project Structure
 
@@ -43,7 +71,6 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 └── README.md
 ```
 
-
 ## Installation
 
 ### 1. Clone and install dependencies
@@ -58,26 +85,7 @@ cd backend
 npm install
 ```
 
-### 2. Environment Variables
-
-#### Frontend (`frontend/.env`)
-
-```env
-VITE_API_URL=http://localhost:5000/api || BACKEND_URL
-```
-
-#### Backend (`backend/.env`)
-
-```env
-PORT=5000
-JWT_SECRET=your-super-secret-jwt-key
-JWT_EXPIRES_IN=24h
-CLIENT_URL=http://localhost:5173 || FRONTEND_URL
-SUPABASE_URL=your-supabase-project-url
-SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-```
-
-### 3. Supabase Setup
+### 2. Supabase Setup
 
 The database schema is automatically created via Supabase migrations. The tables created are:
 
@@ -89,50 +97,75 @@ The database schema is automatically created via Supabase migrations. The tables
 - **sales_challans** — Sales challan records
 - **sales_challan_items** — Individual challan line items with product snapshots
 
-Seed users are automatically inserted:
+## Environment Variables
 
-| Email | Password | Role |
-|-------|----------|------|
-| admin@erp.com | password123 | admin |
-| sales@erp.com | password123 | sales |
-| warehouse@erp.com | password123 | warehouse |
-| accounts@erp.com | password123 | accounts |
+### Frontend (`frontend/.env`)
+
+```env
+VITE_API_URL=http://localhost:5000/api || BACKEND_URL
+```
+
+### Backend (`backend/.env`)
+
+```env
+PORT=5000
+JWT_SECRET=your-super-secret-jwt-key
+JWT_EXPIRES_IN=24h
+CLIENT_URL=http://localhost:5173 || FRONTEND_URL
+SUPABASE_URL=your-supabase-project-url
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+```
 
 ## Running the Application
 
-### Development
+To run the application locally, you will need to start both the backend server and the frontend development server.
 
+### Backend Setup
+1. Open a terminal and navigate to the backend directory:
 ```bash
-# Terminal 1: Start the backend
 cd backend
-npm run dev
-
-# Terminal 2: Start the frontend
-cd frontend
+```
+2. Start the backend development server:
+```bash
 npm run dev
 ```
 
-
-### 3. Frontend Setup
-
-1. Navigate to the frontend directory:
+### Frontend Setup
+1. Open a new terminal and navigate to the frontend directory:
 ```bash
 cd frontend
 ```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Start the frontend development server:
+2. Start the frontend development server:
 ```bash
 npm run dev
 ```
+3. Open `http://localhost:5173` in your browser.
 
-4. Open `http://localhost:5173` in your browser.
+## Architecture
+
+The application follows a standard multi-tier architecture to ensure separation of concerns and maintainability.
+
+### Request Flow
+
+```mermaid
+graph TD;
+    React_Frontend-->|HTTP Requests|Axios_API_Layer;
+    Axios_API_Layer-->|REST API|Express_Routes;
+    Express_Routes-->|Request|Controllers;
+    Controllers-->|Business Logic|Services;
+    Services-->|SQL/ORM|Supabase_PostgreSQL;
+```
+
+### Layer Responsibilities
+- **Routes:** Defines the API endpoints and maps them to the corresponding controller methods. Applies middleware (like authentication and validation) before hitting the controllers.
+- **Controllers:** Handles incoming HTTP requests, extracts parameters/body, calls the appropriate service methods, and formats the HTTP response (success or error).
+- **Services:** Contains the core business logic of the application. It interacts with the database (Supabase) to fetch, create, update, or delete records.
+- **Middleware:** Intercepts requests for centralized tasks such as verifying JWT tokens (auth), validating input data, and catching/formatting errors.
+- **Supabase:** The PostgreSQL database layer that handles data persistence, relationships, and some built-in features.
 
 ## API Documentation
+
+The RESTful API requires JWT Bearer authentication for protected endpoints. The complete documentation, including request/response examples, is available in the Postman collection provided with this repository.
 
 ### Authentication
 | Method | Endpoint | Description |
@@ -170,6 +203,21 @@ npm run dev
 | POST | `/api/challans` | Create challan (draft) | Admin, Sales, Accounts |
 | PATCH | `/api/challans/:id/status` | Update challan status (confirm/cancel) | Admin, Sales, Accounts |
 
+## Test Credentials
+
+Seed users are automatically inserted for testing purposes. You can use the following credentials to log in:
+
+| Email | Password | Role |
+|-------|----------|------|
+| admin@erp.com | password123 | admin |
+| sales@erp.com | password123 | sales |
+| warehouse@erp.com | password123 | warehouse |
+| accounts@erp.com | password123 | accounts |
+
+## Postman Collection
+
+Import the collection from `postman/Enterprise ERP.postman_collection.json` to test all API endpoints.
+
 ## Deployment
 
 ### Frontend (Vercel / Netlify)
@@ -188,9 +236,47 @@ npm run dev
 
 Supabase: [link](https://supabase.com/)
 
-## Postman Collection
+## Environment Variable Management
 
-Import the collection from `postman/Enterprise ERP.postman_collection.json` to test all API endpoints.
+The application uses `.env` files to manage configuration and secrets across environments. These files configure both frontend API connections and backend settings. They are explicitly excluded from version control using `.gitignore` to prevent leaking sensitive information and credentials.
+
+## Server Setup
+
+The backend is built on Express.js and is initialized as follows:
+- **Express Initialization:** Sets up the Express app instance.
+- **Middleware Registration:** Global middlewares like CORS, body-parser (JSON), and logging are registered first.
+- **Supabase Initialization:** The Supabase client is initialized in a dedicated configuration file using the project URL and service role key.
+- **Route Setup:** API routes are modularized by feature (e.g., Auth, Customers, Products, Challans) and mounted onto a base `/api` path.
+- **Authentication:** Protected routes utilize a custom JWT middleware that verifies Bearer tokens and attaches the user context to the request.
+- **Error Handling:** A centralized error-handling middleware catches all unhandled exceptions and formats them into standard JSON error responses.
+
+## Assumptions
+
+The system was designed with the following assumptions:
+- **Authentication:** Standard JWT authentication is used for session management.
+- **Security:** User passwords are encrypted using bcrypt password hashing.
+- **Business Logic:**
+  - Auto-generated challan numbers are sequential and unique.
+  - Product snapshots are stored within challans to maintain historical accuracy even if product prices or details change later.
+  - Stock cannot become negative; validation prevents issuing more stock than is available.
+- **Access Control:** Role-based authorization dictates which features and data are accessible to users.
+- **Notifications:** Low stock alerts are determined dynamically based on current stock levels versus a predefined minimum threshold.
+
+## Bonus Features
+
+In addition to the core requirements, this project implements several bonus features:
+- **Export Sales Challan / Invoice as PDF** (implemented)
+- **Role-based authentication**
+- **Product snapshot storage**
+- **Stock movement tracking**
+- **Pagination, search, and filtering**
+
+## Project Links
+
+- **GitHub Repository:** [Insert Link Here]
+- **Live Frontend URL:** [Insert Link Here]
+- **Live Backend API URL:** [Insert Link Here]
+- **Supabase Project:** [Insert Link Here]
 
 ## License
 
