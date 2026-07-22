@@ -1,4 +1,8 @@
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+let baseUrl = import.meta.env.VITE_API_URL || '/api';
+if (baseUrl && !baseUrl.endsWith('/api')) {
+  baseUrl = baseUrl.replace(/\/+$/, '') + '/api';
+}
+export const API_BASE_URL = baseUrl;
 
 export const ROUTES = {
   LOGIN: '/login',
