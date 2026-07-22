@@ -43,11 +43,6 @@ MAL ERP/CRM is a full-stack Enterprise Resource Planning and Customer Relationsh
 └── README.md
 ```
 
-## Prerequisites
-
-- Node.js 18+
-- npm 
-- A Supabase project 
 
 ## Installation
 
